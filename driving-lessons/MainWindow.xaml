@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:driving_lessons"
-        mc:Ignorable="d"
-        Title="Driving Lessons" Height="450" Width="800">
+        mc:Ignorable="d" ThemeMode="System"
+        Title="Driving Lessons" Height="675" Width="1200"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
     <Grid>
-
+        <Frame Name="MainFrame" NavigationUIVisibility="Hidden" JournalOwnership="OwnsJournal"/>
     </Grid>
 </Window>
