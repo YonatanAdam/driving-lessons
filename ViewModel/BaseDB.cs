@@ -68,7 +68,7 @@ namespace ViewModel
         {
             if (connectionString == null)
             {
-                string dbPath = Path.GetFullPath(@"..\\..\\..\\..\\ViewModel\\yourname.db");
+                string dbPath = Path.GetFullPath(@"..\\..\\..\\..\\ViewModel\\driving-lessons.db");
                 connectionString = $"Data Source={dbPath};";
             }
 
@@ -98,7 +98,7 @@ namespace ViewModel
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message + "\nSQL" + command.CommandText);
+                Console.WriteLine(e.Message + "\nSQL: " + command.CommandText);
             }
             finally
             {
@@ -258,5 +258,7 @@ namespace ViewModel
                 deleted.Add(new ChangeEntity(CreateDeleteSQL, entity));
             }
         }
+
+        protected string EscapeString(string input) => input.Replace("'", "''");
     }
 }

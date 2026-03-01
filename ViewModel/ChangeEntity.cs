@@ -3,6 +3,7 @@
 namespace ViewModel
 {
     public delegate string CreateSQL(BaseEntity entity);
+
     public class ChangeEntity
     {
         private BaseEntity entity;
