@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Model
+﻿namespace Model
 {
     public class User : BaseEntity
     {
         private string name;
-        private int age;
+        private string password;
+        private string email;
 
         public override string ToString()
         {
-            return base.ToString() + $"Name: {name}, Age: {age}";
+            return base.ToString() + $"Name: {name}, Password: {password}, ";
         }
 
         public string Name
@@ -20,10 +17,16 @@ namespace Model
             set => name = value;
         }
 
-        public int Age
+        public string Password
         {
-            get => age;
-            set => age = value;
+            get => password;
+            set => password = value;
+        }
+
+        public string Email
+        {
+            get => email;
+            set => email = value ?? throw new ArgumentNullException(nameof(value));
         }
     }
 }
