@@ -1,5 +1,6 @@
 ﻿using Model;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ViewModel
 {
@@ -44,8 +45,6 @@ namespace ViewModel
             }
         }
 
-        private string EscapeString(string input) => input.Replace("'", "''");
-
         /// <summary>
         /// Creates the SQL statement for deleting a User entity.
         /// </summary>
@@ -67,8 +66,8 @@ namespace ViewModel
         {
             User user = (User)entity;
 
-            return $@"INSERT INTO UserTbl (Name, Age) 
-             VALUES ('{EscapeString(user.Name)}', {user.Age})";
+            return $@"INSERT INTO UserTbl (Name, Email, Password) 
+             VALUES ('{EscapeString(user.Name)}', '{EscapeString(user.Email)}' , '{EscapeString(user.Password)}')";
         }
 
         /// <summary>
@@ -81,7 +80,8 @@ namespace ViewModel
             User userEntity = (User)entity;
             userEntity.Id = Convert.ToInt32(reader["Id"]);
             userEntity.Name = reader["Name"].ToString()!;
-            userEntity.Age = Convert.ToInt32(reader["Age"]);
+            userEntity.Email = reader["Email"].ToString()!;
+            userEntity.Password = reader["Password"].ToString()!;
             return userEntity;
         }
 
@@ -93,8 +93,7 @@ namespace ViewModel
             User user = (User)entity;
 
             return $@"UPDATE UserTbl 
-             SET Name = '{EscapeString(user.Name)}', Age = {user.Age} 
-             WHERE Id = {user.Id}";
+             SET Name = '{EscapeString(user.Name)}', Email = '{EscapeString(user.Email)}', Password = '{EscapeString(user.Password)}' WHERE Id = {user.Id}";
         }
 
         protected override BaseEntity newEntity()
@@ -104,7 +103,7 @@ namespace ViewModel
 
         public UserList SelectAll()
         {
-            string sqlStmt = $"SELECT Id, Name, Age FROM UserTbl";
+            string sqlStmt = $"SELECT * FROM UserTbl";
             command.CommandText = sqlStmt;
             var users = new UserList(Select());
 
@@ -114,7 +113,7 @@ namespace ViewModel
         public User? SelectById(int id)
         {
             command.Parameters.Clear();
-            command.CommandText = $"SELECT Id, Name, Age FROM UserTbl WHERE Id = {id}";
+            command.CommandText = $"SELECT * FROM UserTbl WHERE Id = {id}";
 
             var users = new UserList(Select());
             return users.FirstOrDefault();
@@ -142,5 +141,9 @@ namespace ViewModel
                 Console.WriteLine($"User id {id} not found.");
             }
         }
+
+        public User? SelectByName(string name) => SelectAll().FirstOrDefault(s => s.Name == name);
+
+        public static bool IsValidEmail(string email) => Regex.IsMatch(email, "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
 }
